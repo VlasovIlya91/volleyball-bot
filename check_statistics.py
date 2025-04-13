@@ -2,14 +2,14 @@ import csv
 
 def read_statistics():
     unique_users = set()
-    
+
     # Открываем CSV файл для чтения
     with open('/root/volleyball-bot/user_statistics.csv', mode='r') as file:
         reader = csv.reader(file)
         for row in reader:
             user_id = row[0]  # user_id из каждой строки
-            unique_users.add(user_id)
-    
+            unique_users.add(user_id)  # добавляем только уникальные user_id
+
     print(f"Всего уникальных пользователей: {len(unique_users)}")
     return len(unique_users)
 
