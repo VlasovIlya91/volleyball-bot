@@ -38,7 +38,7 @@ group_info = """Мы рады, что тебе интересны занятия
 def log_start(user_id, username):
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    with open('start_log.csv', mode='a', newline='') as file:
+    with open('/root/volleyball-bot/user_statistics.csv', mode='a', newline='') as file:  # Убедись, что путь правильный
         writer = csv.writer(file)
         writer.writerow([user_id, username, timestamp])
 
@@ -69,4 +69,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
