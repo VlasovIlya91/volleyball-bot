@@ -1,8 +1,10 @@
 import logging
 import os
+import csv
 from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
+from datetime import datetime
 
 # Логирование
 logging.basicConfig(level=logging.INFO)
@@ -32,9 +34,23 @@ group_info = """Мы рады, что тебе интересны занятия
 
 Если тебе это подходит, пиши @sovamarii и тебя включат в состав на игру"""
 
+# Функция для записи статистики в CSV файл
+def log_start(user_id, username):
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    with open('start_log.csv', mode='a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow([user_id, username, timestamp])
+
 # Команды
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     logging.info("👉 Команда /start вызвана")
+
+    # Логируем информацию о пользователе
+    user_id = update.message.from_user.id
+    username = update.message.from_user.username
+    log_start(user_id, username)
+
     await update.message.reply_text(group_info)
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -51,5 +67,6 @@ def main():
     logging.info("✅ Бот запущен. Ожидаем сообщения...")
     app.run_polling()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
+
