@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import os
 from dotenv import load_dotenv
 from telegram import Update
@@ -30,15 +31,21 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Спасибо за сообщение!")
 
 async def main():
-    app = ApplicationBuilder().token(BOT_TOKEN).build()
+    try:
+        app = ApplicationBuilder().token(BOT_TOKEN).build()
 
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+        app.add_handler(CommandHandler("start", start))
+        app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
-    await app.initialize()
-    await app.start()
-    print("Бот запущен. Ожидаем сообщения...")
-    await app.updater.start_polling()
+        await app.initialize()
+        print("Бот запущен. Ожидаем сообщения...")
+        await app.start()
+        await app.updater.start_polling()
+    except asyncio.CancelledError:
+        logging.error("Ошибка asyncio: задача была отменена.")
+    except Exception as e:
+        logging.error(f"Произошла ошибка: {e}")
 
 if __name__ == '__main__':
     asyncio.run(main())
+
