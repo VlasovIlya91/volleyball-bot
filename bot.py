@@ -27,10 +27,14 @@ group_info = """Мы рады, что тебе интересны занятия
 Если тебе это подходит, пиши @sovamarii и тебя включат в состав на игру"""
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print("Команда /start вызвана")
     await update.message.reply_text(group_info)
 
+
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print(f"Получено сообщение: {update.message.text}")
     await update.message.reply_text("Спасибо за сообщение!")
+
 
 async def main():
     try:
